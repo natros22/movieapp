@@ -1,7 +1,3 @@
-// import Movies from "../components/Movies/Movies"
-// import Favorites from "../components/Favorites/Favorites";
-
-
 const initialState = { 
     cart: [],
     movies: [],
@@ -12,16 +8,13 @@ const initialState = {
 export function reducer(state = initialState, action, listName){
     var cart = [...state.cart]
 
-    console.log(cart)
-    console.log(state)
-
     switch(action.type){
         case 'ADD_TO_FAVORITES':
             const found = cart.find(elem => elem.id === action.payload.imdbID);
             if (found) {
                 return state;
             }
-            cart.push({title:action.payload.Title, id:action.payload.imdbID});
+            cart.push({title:action.payload.Title, id:action.payload.imdbID, year:action.payload.Year});
                 return {
                 ...state,
                 cart:cart,
@@ -42,17 +35,12 @@ export function reducer(state = initialState, action, listName){
 
 
         case 'SAVE_CART':
-
-            return {
+             return {
                 ...state,
-                cart:cart,
-                movies: cart,
-                fav:cart,
-        
-        
+                cart: cart,
             }
         
-            case 'DISPLAY_CARD':
+            case 'DISPLAY_CART':
 
             cart = [...state.cart]
                     return{

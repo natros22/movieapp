@@ -2,50 +2,50 @@ import React from 'react';
 import './ListPage.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { state } from '../../store/store';
-// import {useParams} from "react-router"
-// import { Reducer } from 'react';
-// import Favorites from '../../components/Favorites/Favorites';
-// import { applyMiddleware } from 'redux';
+import {useParams} from "react-router-dom"
 
 
 
-export default function ListPage(props, cart, imdbID) {
+export default function ListPage() {
+    
+    
     const [movies, setMovies] =useState([])
+    const [loading, isLoading]  = useState(false)
+    const params = useParams()
 
-console.log(cart)
+// Load data from favorites 
+useEffect(() => { 
+    isLoading(true)
+    fetch(`https://acb-api.algoritmika.org/api/movies/list/${params.id}`)
+    
+    .then(response => response.json())
+    .then(data => {
+        isLoading(false)
+        setMovies(data.movies.payload)
+    
+    })
+    
 
-    useEffect = (() => {
-        state.subscribe(()=>{
-            state.dispatch({
-                type: "DISPLAY_CART",
-                payload:  cart
-        })
-           
-            const mov = state.getState().cart;
-            setMovies(mov);
-           
-} )
-
-        state.dispatch({
-        type: "DISPLAY_CART",
-        payload:  cart
-})
-})
+ 
+ }, [])
 
         return (
             <div className="list-page" >
+                
                 <h1 className="list-page__title">Мой список</h1>
-                <ul>
+                {!loading && <ul>
                     {movies.map((item) => {
                         return (
-                            <li key={item.imdbID}>
-
-                             <a href="https://www.imdb.com/title/tt0068646/" target="_blank">{item.title} ({item.year})</a>
+                            <li className = "results" key={item.id}>  
+                             <a href = {`https://www.imdb.com/title/${item.id}/`} target="_blank" rel="noreferrer">{item.title} ({item.year})</a>
                             </li>
                      
                     )})}
-                </ul>
+                </ul>}
+                {loading && <span>Loading...</span>}
+
          </div>
         );
 }
+
+

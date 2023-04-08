@@ -15,6 +15,7 @@
 
 .favorites__list {
     margin-bottom: 24px;
+    
 }
 
 .favorites__save {
@@ -31,3 +32,5 @@
     opacity: 0.9;
     transition: all 0.2s linear;
 }
+
+

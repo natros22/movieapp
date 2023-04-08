@@ -5,5 +5,9 @@
 body, button, input {
     font-family: 'Roboto', 'Helvetica', sans-serif;
     color: #000807;
+    
 }
 
+.delete-button{
+    margin-left: 20px;
+}

@@ -5,7 +5,9 @@ import SearchBox from '../../components/SearchBox/SearchBox';
 import Movies from '../../components/Movies/Movies';
 import Favorites from '../../components/Favorites/Favorites';
 
-export default function MainPage({searchLine, setSearchLine, props}) {
+export default function MainPage({
+    searchLine, setSearchLine, props
+}) {
 
         return (
             <div className="main-page">

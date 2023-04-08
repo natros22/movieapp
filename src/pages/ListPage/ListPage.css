@@ -7,6 +7,10 @@
     margin-bottom: 26px;
 }
 
-.list-page ul li {
+.list-page ul li{
     font-size: 18px;
+}
+
+li.results {
+    margin-bottom: 15px;
 }

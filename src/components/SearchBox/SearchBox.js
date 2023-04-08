@@ -6,20 +6,11 @@ export default function SearchBox(props, movies, setMovies) {
 
     const [searchLine, setSearchLine] = useState()
     
-    // const searchLineChangeHandler = (e) => {
-    //     setSearchLine(e.target.value);
-    // }
-
     const searchBoxSubmitHandler = (e) => {
         e.preventDefault();
        let userChoice = document.forms["submitForm"]["name"].value
         setSearchLine(userChoice)
-        // Movies()
-        console.log(userChoice)
-
     }
-
-        // const { searchLine } = this.state;
 
         return (
             <div className="search-box">
@@ -36,15 +27,11 @@ export default function SearchBox(props, movies, setMovies) {
                             className="search-box__form-input"
                             placeholder="Например, Shawshank Redemption"
                             name="name"
-                            // onChange={(e)=> setSearchLine(e.target.value)}
                         />
                     </label>
                     <button
                         type="submit"
                         className="search-box__form-submit"
-                        // onClick = {(e => console.log('hello'))}
-                        // onSubmit={searchLineChangeHandler}
-                        // disabled={!searchLine}
                     >
                         Искать
                     </button>

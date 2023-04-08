@@ -1,23 +1,20 @@
 import React, {useState} from 'react';
 import './MovieItem.css';
-// import Favorites from '../Favorites/Favorites';
-// import Movies from '../Movies/Movies';
-// import MainPage from '../../pages/MainPage/MainPage';
 import { state } from '../../store/store';
 
 export default function MovieItem ({ Title, Year, Poster, imdbID, props}){
 const [favorites, setFavorites] = useState('')
 
-
-const addFavoriteMovie = (Title, imdbID) => {
+// add movies to
+const addFavoriteMovie = (Title, imdbID, Year) => {
     
-    console.log(Title, imdbID)
+    
     state.dispatch({
         type: 'ADD_TO_FAVORITES',
-        payload: {Title, imdbID},
+        payload: {Title, imdbID, Year},
         cart: [...favorites]
     })
-    console.log(favorites)
+
     }  
 
         return (
@@ -27,8 +24,7 @@ const addFavoriteMovie = (Title, imdbID) => {
                     <h3 className="movie-item__title">{Title}&nbsp;({Year})</h3>
                     <button type="button"
                     className="movie-item__add-button" 
-                    onClick={()=>addFavoriteMovie(Title, imdbID)}
-                    // handleClick={addFavoriteMovie}
+                    onClick={()=>addFavoriteMovie(Title, imdbID, Year)}
                     >Добавить в список</button>
                     
                 </div>

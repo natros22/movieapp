@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import ListPage from './pages/ListPage/ListPage';
-
+import { useParams } from 'react-router-dom';
 import './reset.css';
 import './common.css';
 

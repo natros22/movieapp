@@ -2,32 +2,35 @@ import React, {useState} from 'react';
 import { useEffect } from 'react';
 import './Favorites.css';
 import { state } from '../../store/store'
-// import { useHistory } from 'react-router-dom';
-// import { createContext } from 'react';
-// import { useParams } from 'react-router';
+import {Link} from "react-router-dom"
 
-
-export default function Favorites (cart) {
-    // const history = useHistory();
-
-    
-     const [ newMovie, setNewMovie] = useState([])
-     const [listName, setListName] = useState([])
+export default function Favorites () {
+    const [ newMovie, setNewMovie] = useState([])
+    const [listName, setListName] = useState("")
     const [newList, setNewList]= useState('')
-    
-     const [btnText, setBtnText] = useState("Сохранить список", false)
-     const [isDisabled, setIsDisabled] =useState(false)
-       
+    const [btnState, setBtnState] = useState(true)
+    const [btnText, setBtnText] = useState("Сохранить список", false)
+    const [isDisabled, setIsDisabled] =useState(false)
+    const [linkState, setLinkState] = useState("none")
+    const [btnColor, setBtnColor] = useState("#d3d3d3")
+    const [loading, setLoading] = useState(false)
+
+
     useEffect(()=>{
         state.subscribe(()=>{
         const fav = state.getState().cart;
         setNewMovie(fav);
-
         })
 
     })
     
+    const ButtonChange = ((e) => {
+        setListName(e.target.value) 
+        setBtnColor("#496ddb")
+
+    })
     
+// delete movies from favorites 
     const deleteOnClick = ((imdbID) => {
         state.dispatch({
             type: "DELETE_FROM_CART",
@@ -35,29 +38,32 @@ export default function Favorites (cart) {
         })
    })
 
-
-   const saveOnClick = ((cart) => {
+// save movies in favorites
+   const saveOnClick = (() => {
        if( btnText === "Перейти к списку"){
-                   
-                     
+                setBtnState(Link)   
+
                 fetch(`https://acb-api.algoritmika.org/api/movies/list/${newList}`)
                 .then(response => response.json())
-                .then(data => {console.log(data.id)
-                window.location.href=(`/list/:${data.id}`)
-            },[])
-            }
-
+                .then(data => {console.log(data.id) 
+                })
+                window.location.href=(`/list/${newList}`)
+        }
         
-        setBtnText("Перейти к списку")
+        if(listName !== "") {   
+        setBtnColor("#496ddb")
         setIsDisabled(true)
-       
+        
+        // sent request
         const savedList = {
-            "title": "listName",
+            "title": {listName},
             "movies":  state.dispatch({
                 type: "SAVE_CART",
-                payload:  cart
+                payload: [...newMovie]
             })
         }
+        setLoading(true)
+        setBtnColor("#496ddb")
        fetch('https://acb-api.algoritmika.org/api/movies/list', {
         method: 'POST',
         headers: {
@@ -67,33 +73,36 @@ export default function Favorites (cart) {
         })
         .then(response => response.json())
         .then(data => {console.log(data)
+           setLoading(false)
            setNewList(data.id)})
-
-        state.dispatch({
-            type: "SAVE_CART",
-            payload:  cart, state
-        })
-    })
-
-
+           setBtnState("none")
+           setLinkState("block")
+           
+    }
+   })
+   
 
            return (
             <div className="favorites">
                 <input disabled = {isDisabled} placeholder="Новый список" 
-                onChange ={(e) =>setListName(e.target.value) }
+                onChange ={ButtonChange }
+                
                 className="favorites__name" />
                 <ul className="favorites__list"  disabled = {isDisabled}>
                     {newMovie.map((item) => {
-                        return <li key={item.id}>{item.title} {item.year}
-                        <button  disabled = {isDisabled} onClick={() => deleteOnClick(item.id)}>x</button>
+                        return <li className = "deleteButton" key={item.id}>{item.title} {item.year}
+                        <button disabled = {isDisabled} onClick={() => deleteOnClick(item.id)}>x</button>
                         </li>;
                     })}
                     
                 </ul>
-                <button type="button" 
+                {!loading && <button type="button" disabled = {isDisabled}
                 className="favorites__save"
                 onClick={() => saveOnClick()}
-                >{btnText}</button>
+                style = {{display: btnState, backgroundColor : btnColor}}>{btnText}</button>}
+                {loading && <button style = {{display: btnState, backgroundColor : btnColor}}>Loading</button>}
+                 <a style = {{display: linkState}} href = {`/list/${newList}`}  >Перейти к списку</a>
+                
             </div>
         );
     
